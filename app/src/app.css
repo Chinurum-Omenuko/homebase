@@ -1,2 +1,21 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+body{
+    background-color: #FDFDFD;
+}
+.main{
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    justify-content: center;
+    align-items: center;
+}
+
+h1, h2, h3, p{
+    color: #26353A;
+}
+
+footer{
+    text-align: center;
+}
