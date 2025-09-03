@@ -3,7 +3,7 @@
   let student = structuredClone(data.student);
 
   async function saveStudent() {
-    const res = await fetch(`http://localhost:8080/students/${student.name}`, {
+    const res = await fetch(`https://pk-sheets-api.onrender.com/students/${student.name}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(student)
