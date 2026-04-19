@@ -1,6 +1,10 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
   export let data;
   let student = structuredClone(data.student);
+
+  let isSaved = false
 
   async function saveStudent() {
     const res = await fetch(`https://pk-sheets-api.onrender.com/students/${student.name}`, {
@@ -10,7 +14,7 @@
     });
 
     if (res.ok) {
-      alert("Student updated!");
+      isSaved = true
     } else {
       alert("Failed to update student");
     }
@@ -19,71 +23,81 @@
   const allStatuses = ["ACTIVE", "NOT_ACTIVE", "PENDING", "REASON"];
 </script>
 
-<div class="form-container">
-  <h1>Edit Student</h1>
+{#if isSaved == false}
+  <div class="form-container">
+    <h1>Edit Student</h1>
 
-  <form on:submit|preventDefault={saveStudent} id="editform">
-    <label>
-      <span>Name</span>
-      <input type="text" value={student.name} />
-    </label>
+    <form on:submit|preventDefault={saveStudent} id="editform">
+      <label>
+        <span>Name</span>
+        <input type="text" value={student.name} />
+      </label>
 
-    <label>
-      <span>Grade</span>
-      <input type="number" bind:value={student.grade} placeholder="Ex. 3" />
-    </label>
+      <label>
+        <span>Grade</span>
+        <input type="number" bind:value={student.grade} placeholder="Ex. 3" />
+      </label>
 
-    <label>
-      <span>Age</span>
-      <input type="number" bind:value={student.age} placeholder="Ex. 10" />
-    </label>
+      <label>
+        <span>Age</span>
+        <input type="number" bind:value={student.age} placeholder="Ex. 10" />
+      </label>
 
-  
-    <label for="subject">
-      <span>Subject</span>
-      <select id="subject" name="subject" required>
-        <option value="MATH">Math</option>
-        <option value="ENGLISH">English</option>
-        <option value="FRENCH">French</option>
-        <option value="CODING">Coding</option>
-      </select>
-    </label>
+    
+      <label for="subject">
+        <span>Subject</span>
+        <select id="subject" name="subject" required>
+          <option value="MATH">Math</option>
+          <option value="ENGLISH">English</option>
+          <option value="FRENCH">French</option>
+          <option value="CODING">Coding</option>
+        </select>
+      </label>
 
-    <label>
-      <span>Teacher</span>
-      <select id="subject" name="subject" required>
-        <option value="Chinurum">Chinurum</option>
-        <option value="Joy">Joy</option>
-      </select>
-    </label>
+      <label>
+        <span>Teacher</span>
+        <select id="subject" name="subject" required>
+          <option value="Chinurum">Chinurum</option>
+          <option value="Joy">Joy</option>
+        </select>
+      </label>
 
-    <label>
-      <span>Price</span>
-      <input type="number" step="0.01" bind:value={student.price} placeholder="Ex. 50.00" />
-    </label>
+      <label>
+        <span>Price</span>
+        <input type="number" step="0.01" bind:value={student.price} placeholder="Ex. 50.00" />
+      </label>
 
-    <label>
-      <span>Occurrence</span>
-      <input type="number" bind:value={student.occurrence} placeholder="Ex. 2 per week" />
-    </label>
+      <label>
+        <span>Occurrence</span>
+        <input type="number" bind:value={student.occurrence} placeholder="Ex. 2 per week" />
+      </label>
 
-    <label>
-      <span>Status</span>
-      <select bind:value={student.status}>
-        {#each allStatuses as s}
-          <option value={s}>{s.replace("_", " ")}</option>
-        {/each}
-      </select>
-    </label>
+      <label>
+        <span>Status</span>
+        <select bind:value={student.status}>
+          {#each allStatuses as s}
+            <option value={s}>{s.replace("_", " ")}</option>
+          {/each}
+        </select>
+      </label>
 
-    <label>
-      <span>Date Started</span>
-      <input type="date" bind:value={student.dateStarted} />
-    </label>
+      <label>
+        <span>Date Started</span>
+        <input type="date" bind:value={student.dateStarted} />
+      </label>
 
-    <button type="submit">Save</button>
-  </form>
-</div>
+      <button type="submit">Save</button>
+      <button on:click={() } class="delete">Delete</button>
+    </form>
+  </div>
+{:else}
+  <div class="modal" on:click={() => isSaved = false}>
+    <div class="modal-content" on:click|stopPropagation>
+      <span>{student.name} is saved</span>
+      <button on:click={() => goto("/all-students")}>Return</button>
+    </div>
+  </div>
+{/if}
 
 <style>
   .form-container {
@@ -99,6 +113,10 @@
     font-size: 1.25rem;
     font-weight: bold;
     color: #333;
+  }
+
+  .delete{
+    background-color: #d23336;
   }
 
   form {
@@ -145,6 +163,45 @@
   }
 
   button:hover {
+    background: #343438;
+  }
+
+
+  .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .modal-content span {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+
+  .modal-content button {
+    background: #080a0c;
+    color: white;
+    font-size: 1rem;
+    padding: 0.75rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .modal-content button:hover {
     background: #343438;
   }
 </style>

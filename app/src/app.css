@@ -2,7 +2,7 @@
 @plugin '@tailwindcss/typography';
 
 body{
-    background-color: #FDFDFD;
+    background-color: #e8e8e8;
 }
 .main{
     display: flex;
